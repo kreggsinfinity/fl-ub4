@@ -1,58 +1,66 @@
 """
-Idioms & Slang Decoded - Video Generator (9:16 Vertical Reel)
-Explains popular idioms and slang: Literal vs Actual Meaning + Origin Story + Usage.
+IDIOMS & SLANG PODCAST - 16:9 FULL HD (1920x1080) VIDEO GENERATOR
+Format: 1920x1080 Landscape Studio Broadcast
+Dual Hosts (Emma & Andrew) breaking down native idioms, cultural expressions, and slang with origins and real-life examples.
 """
-import os, sys, json, subprocess, random, requests, re, asyncio
+import os, sys, json, math, subprocess, random, requests, re, asyncio
 from pathlib import Path
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from dotenv import load_dotenv
 import edge_tts
 
+if sys.platform == 'win32':
+    try: sys.stdout.reconfigure(encoding='utf-8')
+    except Exception: pass
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).parent
+ASSETS_DIR = BASE_DIR / "assets"
 OUTPUT_DIR = BASE_DIR / "output"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-WIDTH = 1080
-HEIGHT = 1920
+VIDEO_WIDTH = 1920
+VIDEO_HEIGHT = 1080
 FPS = 30
 
-BG_DARK = (15, 12, 32)
-PURPLE_ACCENT = (147, 51, 234)
-MAGENTA_ACCENT = (236, 72, 153)
-CYAN_ACCENT = (6, 182, 212)
-GOLD = (250, 204, 21)
+YELLOW = (255, 215, 0)
 WHITE = (255, 255, 255)
-CARD_BG = (28, 22, 58)
+MUTED_WHITE = (220, 225, 235)
+DARK_BG = (14, 12, 28)
+DARK_BAR = (24, 20, 48)
+PURPLE_ACCENT = (168, 85, 247)
+CHANNEL_NAME = "IDIOMS & SLANG PODCAST"
 
-VOICE_NATIVE = "en-US-AvaNeural"
+EMMA_VOICE = "en-US-AvaNeural"
+ANDREW_VOICE = "en-US-AndrewNeural"
+VOICE_RATE = "-15%"
 
-IDIOMS = [
+TOPICS = [
     {
+        "topic": "The Story Behind 'Bite The Bullet' and How To Use It",
         "idiom": "BITE THE BULLET",
-        "literal": "Chewing on metal ammunition ❌",
-        "meaning": "To bravely face a difficult situation you cannot avoid ✅",
-        "origin": "Origin: Soldiers in battle bit on lead bullets to endure painful surgery before anesthesia!",
-        "example": "I really hate dental visits, but tomorrow I just have to **bite the bullet**.",
-        "script": [
-            "What does the idiom 'Bite the bullet' actually mean in English?",
-            "It does NOT mean chewing metal! It means bravely facing a hard situation you cannot avoid.",
-            "Example: I hate dental visits, but tomorrow I just have to bite the bullet! Follow for daily idioms!"
-        ]
+        "keyword": "BULLET",
+        "sub": "FACE DIFFICULTIES WITH COURAGE"
     },
     {
+        "topic": "Why Do Actors Say 'Break A Leg' Instead of Good Luck?",
         "idiom": "BREAK A LEG",
-        "literal": "Fracturing your actual leg bones ❌",
-        "meaning": "Wishing someone good luck before a big performance ✅",
-        "origin": "Origin: Old theatre superstition that wishing good luck would invite bad spirits!",
-        "example": "You are going to do great in your presentation today, **break a leg**!",
-        "script": [
-            "If someone tells you to 'Break a leg', do not be afraid!",
-            "It is the theatrical way to wish someone good luck before a big speech or performance.",
-            "Example: You will do great today Emma, break a leg! Save this reel!"
-        ]
+        "keyword": "LUCK",
+        "sub": "POPULAR THEATRE SUPERSTITIONS"
+    },
+    {
+        "topic": "Understanding 'Hit The Sack' and Daily Sleep Slang",
+        "idiom": "HIT THE SACK",
+        "keyword": "SLEEP",
+        "sub": "CASUAL AMERICAN NIGHTTIME SLANG"
+    },
+    {
+        "topic": "What Does 'Cut Corners' Mean in Work and Life?",
+        "idiom": "CUT CORNERS",
+        "keyword": "QUALITY",
+        "sub": "BUSINESS AND EVERYDAY IDIOMS"
     }
 ]
 
@@ -61,6 +69,7 @@ def load_font(size, bold=True):
         "C:/Windows/Fonts/arialbd.ttf",
         "C:/Windows/Fonts/arial.ttf",
         "C:/Windows/Fonts/segoeuib.ttf",
+        "C:/Windows/Fonts/trebucbd.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     ]
@@ -70,166 +79,261 @@ def load_font(size, bold=True):
             except: continue
     return ImageFont.load_default()
 
-def render_idiom_frame(item, step_idx, total_steps, out_path):
-    canvas = Image.new("RGBA", (WIDTH, HEIGHT), BG_DARK)
+def clean_text(text):
+    text = re.sub(r'\b(mm+|um+|uh+|ah+)\b', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+def generate_script_ai(topic_item, target_turns=6):
+    prompt = f"""Write {target_turns} turns of a slow, clear English podcast between Emma and Andrew.
+Topic: {topic_item['topic']}
+Idiom: {topic_item['idiom']}
+
+RULES:
+- Dialogue alternating between Host1 (Emma) and Host2 (Andrew)
+- Each turn MUST be 2-3 short, clear sentences (18-28 words)
+- Explain what the idiom really means, why the literal translation is funny or wrong, and provide a realistic conversational example
+- Wrap exactly 1 key learning word per turn in **asterisks**
+- Return as clean JSON array only:
+[{{"speaker":"Host1","text":"..."}},{{"speaker":"Host2","text":"..."}}]"""
+
+    key = os.getenv("POLLINATIONS_API_KEY")
+    if key:
+        try:
+            resp = requests.post("https://gen.pollinations.ai/v1/chat/completions", json={
+                "model": "gemini-fast",
+                "messages": [
+                    {"role": "system", "content": "You write engaging, natural English learning podcast dialogue about idioms and slang. Wrap 1 key word per turn in **asterisks**."},
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.8
+            }, headers={"Authorization": f"Bearer {key}"}, timeout=60)
+            if resp.status_code == 200:
+                raw = resp.json()["choices"][0]["message"]["content"].strip()
+                if "```json" in raw: raw = raw.split("```json")[1].split("```")[0].strip()
+                elif "```" in raw: raw = raw.split("```")[1].split("```")[0].strip()
+                script = json.loads(raw)
+                if isinstance(script, list) and len(script) > 0:
+                    for i, turn in enumerate(script):
+                        turn["speaker"] = "Host1" if i % 2 == 0 else "Host2"
+                        turn["text"] = clean_text(turn["text"])
+                        if "**" not in turn["text"]:
+                            words = turn["text"].split()
+                            if len(words) > 2:
+                                idx = len(words) // 2
+                                words[idx] = f"**{words[idx]}**"
+                                turn["text"] = " ".join(words)
+                    return script[:target_turns]
+        except Exception as e:
+            print(f"[script] AI note: {e}, using curated fallback.")
+
+    return [
+        {"speaker": "Host1", "text": f"Welcome back everyone! Today we are decoding the popular idiom: **{topic_item['idiom']}**."},
+        {"speaker": "Host2", "text": f"Don't translate it literally! It simply means to face an inevitable challenge with **bravery**."},
+        {"speaker": "Host1", "text": f"For example, if you dislike going to the dentist, you just have to bite the **bullet** and go."},
+        {"speaker": "Host2", "text": f"Using idioms like this in your conversations will instantly make you sound like a **native** speaker!"}
+    ][:target_turns]
+
+async def generate_audio_files(turns, run_dir):
+    audio_dir = run_dir / "audio"
+    audio_dir.mkdir(parents=True, exist_ok=True)
+    audio_list = []
+    for i, turn in enumerate(turns):
+        mp3_p = audio_dir / f"turn_{i:03d}.mp3"
+        spoken = re.sub(r'\*\*(.*?)\*\*', r'\1', turn["text"])
+        voice = EMMA_VOICE if turn["speaker"] == "Host1" else ANDREW_VOICE
+        comm = edge_tts.Communicate(spoken, voice, rate=VOICE_RATE)
+        await comm.save(str(mp3_p))
+
+        try:
+            r = subprocess.run(
+                ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                 "-of", "default=noprint_wrappers=1:nokey=1", str(mp3_p)],
+                capture_output=True, text=True, check=True
+            )
+            duration = float(r.stdout.strip())
+        except:
+            duration = 5.0
+        audio_list.append({"path": str(mp3_p), "duration": duration, "speaker": turn["speaker"]})
+    return audio_list
+
+def draw_equalizer_waves(draw, start_x, start_y, frame_idx=0):
+    num_bars = 8
+    bar_w = 5
+    gap = 6
+    for i in range(num_bars):
+        h = int(16 + 14 * abs(math.sin(frame_idx * 0.5 + i * 1.2)))
+        x = start_x + i * (bar_w + gap)
+        y_top = start_y - h // 2
+        y_bot = start_y + h // 2
+        draw.rounded_rectangle([(x, y_top), (x + bar_w, y_bot)], radius=2, fill=YELLOW)
+
+def render_podcast_frame(topic_item, turn, idx, total_turns, elapsed, total_dur, out_path):
+    woman_path = ASSETS_DIR / "woman_base.png"
+    if woman_path.exists():
+        canvas = Image.open(woman_path).convert("RGBA").resize((VIDEO_WIDTH, VIDEO_HEIGHT), Image.Resampling.LANCZOS)
+    else:
+        canvas = Image.new("RGBA", (VIDEO_WIDTH, VIDEO_HEIGHT), DARK_BG)
+        gdraw = ImageDraw.Draw(canvas)
+        for y in range(VIDEO_HEIGHT):
+            shade = int(14 + (y / VIDEO_HEIGHT) * 20)
+            gdraw.line([(0, y), (VIDEO_WIDTH, y)], fill=(shade, shade + 3, shade + 18, 255))
+
     draw = ImageDraw.Draw(canvas)
 
-    # Gradient background
-    for y in range(HEIGHT):
-        ratio = y / HEIGHT
-        r = int(18 + ratio * 20)
-        g = int(12 + ratio * 15)
-        b = int(35 + ratio * 45)
-        draw.line([(0, y), (WIDTH, y)], fill=(r, g, b, 255))
+    # 1. Top Left Channel Badge
+    font_tab = load_font(30, bold=True)
+    draw.rounded_rectangle([(60, 40), (610, 110)], radius=18, fill=DARK_BAR, outline=YELLOW, width=3)
+    draw_equalizer_waves(draw, 90, 75, frame_idx=idx)
+    draw.text((190, 75), CHANNEL_NAME, fill=WHITE, font=font_tab, anchor="lm")
 
-    # Top Pill
-    draw.rounded_rectangle([(70, 90), (WIDTH - 70, 180)], radius=22, fill=(35, 25, 70), outline=MAGENTA_ACCENT, width=3)
-    f_hdr = load_font(32, bold=True)
-    draw.text((WIDTH // 2, 135), "🔥 SLANG & IDIOM DECODED", fill=MAGENTA_ACCENT, font=f_hdr, anchor="mm")
+    # 2. Top Center Idiom Pill
+    draw.rounded_rectangle([(650, 40), (1480, 110)], radius=18, fill=(36, 26, 60), outline=PURPLE_ACCENT, width=2)
+    f_topic = load_font(26, bold=True)
+    draw.text((1065, 75), f"🔥 IDIOM: {topic_item['idiom']}", fill=PURPLE_ACCENT, font=f_topic, anchor="mm")
 
-    # Big Idiom Banner
-    draw.rounded_rectangle([(70, 220), (WIDTH - 70, 430)], radius=30, fill=(45, 30, 90), outline=GOLD, width=4)
-    f_sub_lbl = load_font(28, bold=True)
-    draw.text((WIDTH // 2, 270), "NATIVE EXPRESSION OF THE DAY:", fill=CYAN_ACCENT, font=f_sub_lbl, anchor="mm")
-    f_idiom = load_font(68, bold=True)
-    draw.text((WIDTH // 2, 350), f'"{item["idiom"]}"', fill=GOLD, font=f_idiom, anchor="mm")
+    # 3. Top Right Speaker Badge
+    speaker_name = "EMMA" if turn["speaker"] == "Host1" else "ANDREW"
+    font_spk = load_font(28, bold=True)
+    draw.rounded_rectangle([(1520, 40), (1860, 110)], radius=18, fill=DARK_BAR, outline=YELLOW, width=3)
+    draw.text((1690, 75), f"🎙️ HOST: {speaker_name}", fill=YELLOW, font=font_spk, anchor="mm")
 
-    # Literal Meaning Card
-    draw.rounded_rectangle([(70, 470), (WIDTH - 70, 680)], radius=25, fill=(40, 20, 35), outline=(239, 68, 68), width=3)
-    f_tag = load_font(26, bold=True)
-    draw.rounded_rectangle([(110, 495), (420, 545)], radius=12, fill=(239, 68, 68))
-    draw.text((265, 520), "❌ LITERAL MEANING", fill=WHITE, font=f_tag, anchor="mm")
-    f_lit = load_font(38, bold=True)
-    draw.text((WIDTH // 2, 610), item["literal"], fill=(255, 180, 180), font=f_lit, anchor="mm")
+    # 4. Center Podcast Dialogue Text Display
+    text = turn["text"]
+    parts = re.split(r'(\*\*.*?\*\*)', text)
+    words_list = []
+    for p in parts:
+        if p.startswith('**') and p.endswith('**'):
+            words_list.append((p[2:-2], True))
+        elif p:
+            for w in p.split(' '):
+                if w: words_list.append((w, False))
 
-    # True Meaning Card
-    draw.rounded_rectangle([(70, 720), (WIDTH - 70, 1020)], radius=25, fill=(20, 45, 50), outline=(16, 185, 129), width=4)
-    draw.rounded_rectangle([(110, 745), (450, 795)], radius=12, fill=(16, 185, 129))
-    draw.text((280, 770), "✅ ACTUAL MEANING", fill=WHITE, font=f_tag, anchor="mm")
-    f_true = load_font(42, bold=True)
+    text_left = 780
+    text_right = 1820
+    max_w = text_right - text_left
+    center_x = (text_left + text_right) // 2
 
-    words = item["meaning"].split()
-    lines = []
-    c_line = []
-    for w in words:
-        tb = draw.textbbox((0, 0), " ".join(c_line + [w]), font=f_true)
-        if tb[2] - tb[0] > (WIDTH - 240):
-            lines.append(" ".join(c_line))
-            c_line = [w]
-        else:
-            c_line.append(w)
-    if c_line: lines.append(" ".join(c_line))
-    for l_idx, l in enumerate(lines):
-        draw.text((WIDTH // 2, 850 + l_idx * 55), l, fill=WHITE, font=f_true, anchor="mm")
+    font_size = 85
+    lines = None
+    while font_size >= 45:
+        curr_font = load_font(font_size, bold=True)
+        curr_lines = []
+        curr_line = []
+        curr_w = 0
+        for word, is_y in words_list:
+            wb = draw.textbbox((0, 0), word, font=curr_font)
+            wl = wb[2] - wb[0] + 12
+            if curr_w + wl > max_w and curr_line:
+                curr_lines.append((curr_line, curr_w))
+                curr_line = [(word, is_y, wl)]
+                curr_w = wl
+            else:
+                curr_line.append((word, is_y, wl))
+                curr_w += wl
+        if curr_line:
+            curr_lines.append((curr_line, curr_w))
+        if len(curr_lines) <= 3 and all(w <= max_w for _, w in curr_lines):
+            lines = curr_lines
+            main_font = curr_font
+            break
+        font_size -= 5
 
-    # Origin Story Box
-    draw.rounded_rectangle([(70, 1060), (WIDTH - 70, 1340)], radius=25, fill=CARD_BG, outline=PURPLE_ACCENT, width=3)
-    f_orig_lbl = load_font(28, bold=True)
-    draw.text((110, 1105), "🧠 HISTORICAL ORIGIN & BACKSTORY:", fill=GOLD, font=f_orig_lbl, anchor="lm")
-    f_orig_txt = load_font(34, bold=False)
+    if lines is None:
+        main_font = load_font(45, bold=True)
+        lines = curr_lines
 
-    owords = item["origin"].split()
-    olines = []
-    col = []
-    for ow in owords:
-        tb = draw.textbbox((0, 0), " ".join(col + [ow]), font=f_orig_txt)
-        if tb[2] - tb[0] > (WIDTH - 240):
-            olines.append(" ".join(col))
-            col = [ow]
-        else:
-            col = [ow]
-    if col: olines.append(" ".join(col))
-    for ol_idx, ol in enumerate(olines):
-        draw.text((110, 1165 + ol_idx * 48), ol, fill=(225, 230, 245), font=f_orig_txt, anchor="lm")
+    line_h = int(font_size * 1.35)
+    total_h = len(lines) * line_h
+    start_y = 520 - total_h // 2
 
-    # Example Card
-    draw.rounded_rectangle([(70, 1380), (WIDTH - 70, 1680)], radius=25, fill=(30, 36, 68), outline=CYAN_ACCENT, width=3)
-    f_ex_lbl = load_font(28, bold=True)
-    draw.text((110, 1425), "💬 NATIVE CONVERSATION USAGE:", fill=CYAN_ACCENT, font=f_ex_lbl, anchor="lm")
+    shadow_img = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    sdraw = ImageDraw.Draw(shadow_img)
+    for l_idx, (line_words, line_w) in enumerate(lines):
+        cx = center_x - line_w // 2
+        cy = start_y + l_idx * line_h
+        for word, _, wl in line_words:
+            sdraw.text((cx + 4, cy + 4), word, fill=(0, 0, 0, 230), font=main_font)
+            cx += wl
+    shadow_img = shadow_img.filter(ImageFilter.GaussianBlur(5))
+    canvas.paste(shadow_img, (0, 0), shadow_img)
 
-    f_ex = load_font(40, bold=True)
-    ex_clean = item["example"].replace("**", "")
-    ewords = ex_clean.split()
-    elines = []
-    ce = []
-    for ew in ewords:
-        tb = draw.textbbox((0, 0), " ".join(ce + [ew]), font=f_ex)
-        if tb[2] - tb[0] > (WIDTH - 240):
-            elines.append(" ".join(ce))
-            ce = [ew]
-        else:
-            ce = [ew]
-    if ce: elines.append(" ".join(ce))
-    for el_idx, el in enumerate(elines):
-        draw.text((WIDTH // 2, 1510 + el_idx * 55), f'"{el}"', fill=WHITE, font=f_ex, anchor="mm")
+    draw = ImageDraw.Draw(canvas)
+    for l_idx, (line_words, line_w) in enumerate(lines):
+        cx = center_x - line_w // 2
+        cy = start_y + l_idx * line_h
+        for word, is_y, wl in line_words:
+            color = YELLOW if is_y else WHITE
+            draw.text((cx, cy), word, fill=color, font=main_font)
+            cx += wl
 
-    # Footer
-    f_cta = load_font(32, bold=True)
-    draw.text((WIDTH // 2, 1780), "❤️ Double-Tap if you loved this expression!", fill=MAGENTA_ACCENT, font=f_cta, anchor="mm")
-    f_sub = load_font(26, bold=False)
-    draw.text((WIDTH // 2, 1835), "Follow Idioms & Slang Master for daily secrets!", fill=(148, 163, 184), font=f_sub, anchor="mm")
+    # 5. Bottom Progress Bar & Branding
+    draw.line([(0, 1020), (VIDEO_WIDTH, 1020)], fill=(35, 30, 55), width=3)
+    ratio = min(1.0, elapsed / max(1.0, total_dur))
+    draw.line([(0, 1020), (int(VIDEO_WIDTH * ratio), 1020)], fill=YELLOW, width=6)
 
-    canvas.convert("RGB").save(out_path, quality=95)
+    font_sub = load_font(26, bold=False)
+    draw.text((70, 1050), "Native Idioms • American Slang • Cultural Expressions", fill=MUTED_WHITE, font=font_sub, anchor="lm")
+    time_str = f"{int(elapsed // 60):02d}:{int(elapsed % 60):02d} / {int(total_dur // 60):02d}:{int(total_dur % 60):02d}"
+    draw.text((1850, 1050), time_str, fill=YELLOW, font=font_sub, anchor="rm")
 
-async def assemble_idiom_reel(item, run_dir):
+    canvas.convert("RGB").save(out_path, quality=92)
+
+def assemble_video(topic_item, turns, audio_list, run_dir):
     frames_dir = run_dir / "frames"
     clips_dir = run_dir / "clips"
-    audio_dir = run_dir / "audio"
-    for d in [frames_dir, clips_dir, audio_dir]:
-        d.mkdir(parents=True, exist_ok=True)
+    frames_dir.mkdir(parents=True, exist_ok=True)
+    clips_dir.mkdir(parents=True, exist_ok=True)
 
+    total_dur = sum(a["duration"] for a in audio_list)
+    elapsed = 0.0
     clips = []
-    total_steps = len(item["script"])
 
-    for s_idx, text in enumerate(item["script"]):
-        mp3_p = audio_dir / f"step_{s_idx}.mp3"
-        await edge_tts.Communicate(text, VOICE_NATIVE, rate="-10%").save(str(mp3_p))
+    for i, (turn, audio) in enumerate(zip(turns, audio_list)):
+        img_p = frames_dir / f"frame_{i:03d}.png"
+        clip_p = clips_dir / f"clip_{i:03d}.mp4"
 
-        r = subprocess.run(
-            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
-             "-of", "default=noprint_wrappers=1:nokey=1", str(mp3_p)],
-            capture_output=True, text=True, check=True
-        )
-        dur = float(r.stdout.strip())
+        render_podcast_frame(topic_item, turn, i, len(turns), elapsed, total_dur, str(img_p))
 
-        frame_p = frames_dir / f"frame_{s_idx}.png"
-        render_idiom_frame(item, s_idx, total_steps, str(frame_p))
-
-        clip_p = clips_dir / f"clip_{s_idx}.mp4"
+        dur_str = f"{audio['duration']:.3f}"
         subprocess.run([
-            "ffmpeg", "-y", "-loop", "1", "-i", str(frame_p), "-i", str(mp3_p),
-            "-vf", f"scale={WIDTH}:{HEIGHT},fps={FPS}",
+            "ffmpeg", "-y", "-loop", "1", "-i", str(img_p), "-i", audio["path"],
+            "-vf", f"scale={VIDEO_WIDTH}:{VIDEO_HEIGHT},fps={FPS}",
             "-c:v", "libx264", "-c:a", "aac", "-b:a", "192k",
-            "-pix_fmt", "yuv420p", "-preset", "fast", "-t", f"{dur:.3f}", str(clip_p)
+            "-pix_fmt", "yuv420p", "-preset", "fast", "-t", dur_str, str(clip_p)
         ], check=True, capture_output=True)
 
         clips.append(clip_p)
+        elapsed += audio["duration"]
 
     concat_txt = run_dir / "concat.txt"
     with open(concat_txt, "w") as f:
         for c in clips:
             f.write(f"file '{c.resolve().as_posix()}'\n")
 
-    final_v = run_dir / "idioms_slang_reel.mp4"
-    subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_txt), "-c", "copy", str(final_v)], check=True, capture_output=True)
-    return final_v
+    final_video = run_dir / "idioms_slang_podcast_final.mp4"
+    subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_txt), "-c", "copy", str(final_video)], check=True, capture_output=True)
+    return final_video, total_dur
 
-async def run_idiom_generation(idx=0):
-    item = IDIOMS[idx % len(IDIOMS)]
+async def run_idiom_generation(topic_idx=0, turns_count=4):
+    topic_item = TOPICS[topic_idx % len(TOPICS)]
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir = OUTPUT_DIR / f"run_{ts}"
     run_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[Idioms & Slang] Generating Reel for: '{item['idiom']}'...")
-    final_v = await assemble_idiom_reel(item, run_dir)
+    print(f"[Idioms Podcast] Generating 16:9 Podcast: '{topic_item['topic']}' ({turns_count} turns)...")
+    turns = generate_script_ai(topic_item, target_turns=turns_count)
+    audio_list = await generate_audio_files(turns, run_dir)
+    video_p, dur = assemble_video(topic_item, turns, audio_list, run_dir)
 
     meta = {
-        "title": f"What does '{item['idiom']}' mean? 🔥 English Idioms Decoded",
-        "description": f"Learn the real meaning, history, and natural usage of the English idiom '{item['idiom']}'. Follow for daily idioms and slang! 🧠📚",
-        "idiom": item["idiom"]
+        "title": f"What Does '{topic_item['idiom']}' Mean? 🎙️ Slow English Idioms Podcast",
+        "description": f"Learn the real meaning, history, and casual usage of '{topic_item['idiom']}'! Enjoy our slow English conversation lesson. Follow for daily idioms! 🧠📚",
+        "idiom": topic_item["idiom"],
+        "duration_seconds": dur
     }
     with open(run_dir / "metadata.json", "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2)
 
-    print(f"[Idioms & Slang] Video saved: {final_v}")
-    return final_v, meta
+    print(f"[Idioms Podcast] Video ready: {video_p}")
+    return video_p, meta
