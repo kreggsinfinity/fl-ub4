@@ -8,6 +8,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.07,
     "video_file": "podcast_ep1_20261015_174130.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 2,
+    "topic": "Spill the Tea: Unpacking the Drama & Dialogue of Everyday Gossip",
+    "date": "2026-10-16T17:34:13.346184",
+    "duration_sec": 1307.42,
+    "duration_min": 21.79,
+    "video_file": "podcast_ep2_20261016_171452.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
