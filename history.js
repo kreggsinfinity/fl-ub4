@@ -17,6 +17,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.79,
     "video_file": "podcast_ep2_20261016_171452.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 3,
+    "topic": "Beyond 'Lit': How to Sound Fresh with Next-Level Slang & Evolving Emojis",
+    "date": "2026-10-17T16:24:57.819592",
+    "duration_sec": 1380.29,
+    "duration_min": 23.0,
+    "video_file": "podcast_ep3_20261017_161328.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
