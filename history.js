@@ -35,6 +35,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.75,
     "video_file": "podcast_ep4_20261018_162522.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 5,
+    "topic": "From 'IYKYK' to 'Bet': Mastering the Art of Implicit Communication in Urban Lingo",
+    "date": "2026-10-19T19:22:13.709144",
+    "duration_sec": 1352.47,
+    "duration_min": 22.54,
+    "video_file": "podcast_ep5_20261019_191010.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
