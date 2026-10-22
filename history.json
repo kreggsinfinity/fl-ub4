@@ -61,5 +61,14 @@
     "duration_min": 22.22,
     "video_file": "podcast_ep7_20261021_175723.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 8,
+    "topic": "From 'Boujee' to 'Snatched': Level Up Your Luxury & Style Vocabulary",
+    "date": "2026-10-22T18:17:29.252239",
+    "duration_sec": 1412.06,
+    "duration_min": 23.53,
+    "video_file": "podcast_ep8_20261022_175404.mp4",
+    "platform": "Facebook"
   }
 ]
