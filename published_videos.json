@@ -70,5 +70,14 @@
     "duration_min": 23.53,
     "video_file": "podcast_ep8_20261022_175404.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 9,
+    "topic": "From 'Cap' to 'No Cap': Unpacking the Truths and Lies of Streetwise Authenticity",
+    "date": "2026-10-23T18:02:36.213598",
+    "duration_sec": 1312.41,
+    "duration_min": 21.87,
+    "video_file": "podcast_ep9_20261023_174802.mp4",
+    "platform": "Facebook"
   }
 ]
