@@ -80,6 +80,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.87,
     "video_file": "podcast_ep9_20261023_174802.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 10,
+    "topic": "From 'CEO of' to 'It's giving': Mastering the Meta-Lingo of Online Personas",
+    "date": "2026-10-24T16:54:58.595587",
+    "duration_sec": 1410.65,
+    "duration_min": 23.51,
+    "video_file": "podcast_ep10_20261024_162847.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
