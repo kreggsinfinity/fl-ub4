@@ -98,6 +98,15 @@ const PODCAST_HISTORY = [
     "duration_min": 23.49,
     "video_file": "podcast_ep11_20261025_170021.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 12,
+    "topic": "From 'Snack' to 'Main Character': Mastering the Lingo of Attraction & Confidence",
+    "date": "2026-10-26T19:31:42.362131",
+    "duration_sec": 1350.36,
+    "duration_min": 22.51,
+    "video_file": "podcast_ep12_20261026_190511.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
