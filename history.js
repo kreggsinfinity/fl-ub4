@@ -107,6 +107,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.51,
     "video_file": "podcast_ep12_20261026_190511.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 13,
+    "topic": "The Real Talk: Unpacking 'The Lingo of Real Life' & How to Sound Legit",
+    "date": "2026-10-27T19:32:43.694163",
+    "duration_sec": 1396.65,
+    "duration_min": 23.28,
+    "video_file": "podcast_ep13_20261027_190352.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
