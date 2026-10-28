@@ -116,6 +116,15 @@ const PODCAST_HISTORY = [
     "duration_min": 23.28,
     "video_file": "podcast_ep13_20261027_190352.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 14,
+    "topic": "The Shade Room Unlocked: Decoding Sarcasm, Wit, and the Art of the Subtle Burn",
+    "date": "2026-10-28T19:06:36.436104",
+    "duration_sec": 1303.68,
+    "duration_min": 21.73,
+    "video_file": "podcast_ep14_20261028_184307.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
