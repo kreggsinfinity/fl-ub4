@@ -152,6 +152,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.74,
     "video_file": "podcast_ep17_20261031_173356.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 18,
+    "topic": "From 'It's Giving' to 'On God': Mastering the Nuances of Modern Affirmations & Authenticity",
+    "date": "2026-11-01T18:38:04.841668",
+    "duration_sec": 1306.8,
+    "duration_min": 21.78,
+    "video_file": "podcast_ep18_20261101_181939.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
