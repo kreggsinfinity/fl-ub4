@@ -161,6 +161,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.78,
     "video_file": "podcast_ep18_20261101_181939.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 19,
+    "topic": "Beyond the Drip: Decoding the Lingo of 'The Grind' & Hustle Culture",
+    "date": "2026-11-02T22:32:17.826751",
+    "duration_sec": 1345.56,
+    "duration_min": 22.43,
+    "video_file": "podcast_ep19_20261102_221349.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
