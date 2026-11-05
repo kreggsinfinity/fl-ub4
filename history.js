@@ -188,6 +188,15 @@ const PODCAST_HISTORY = [
     "duration_min": 23.31,
     "video_file": "podcast_ep21_20261104_202040.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 22,
+    "topic": "From 'IYKYK' to 'The Realness': Unpacking Authenticity & Real Talk in Urban Lingo",
+    "date": "2026-11-05T20:50:34.816929",
+    "duration_sec": 1370.06,
+    "duration_min": 22.83,
+    "video_file": "podcast_ep22_20261105_203046.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
