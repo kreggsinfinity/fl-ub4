@@ -197,6 +197,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.83,
     "video_file": "podcast_ep22_20261105_203046.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 23,
+    "topic": "From 'IYKYK' to 'Vibe Check': Navigating the Subtle Art of Social Cues",
+    "date": "2026-11-06T20:13:44.498627",
+    "duration_sec": 1346.86,
+    "duration_min": 22.45,
+    "video_file": "podcast_ep23_20261106_195412.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
