@@ -206,6 +206,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.45,
     "video_file": "podcast_ep23_20261106_195412.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 24,
+    "topic": "Flex Your Flows: Mastering the Art of Smooth Talk & Impromptu Rhymes",
+    "date": "2026-11-07T18:15:21.827961",
+    "duration_sec": 1422.26,
+    "duration_min": 23.7,
+    "video_file": "podcast_ep24_20261107_175824.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
