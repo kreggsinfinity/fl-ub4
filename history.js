@@ -215,6 +215,15 @@ const PODCAST_HISTORY = [
     "duration_min": 23.7,
     "video_file": "podcast_ep24_20261107_175824.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 25,
+    "topic": "From 'Salty' to 'Shook': Mastering the Emotional Rollercoaster of Modern Reactions",
+    "date": "2026-11-08T18:35:47.015821",
+    "duration_sec": 1319.09,
+    "duration_min": 21.98,
+    "video_file": "podcast_ep25_20261108_181621.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
