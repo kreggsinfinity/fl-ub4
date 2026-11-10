@@ -233,6 +233,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.13,
     "video_file": "podcast_ep26_20261109_225539.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 27,
+    "topic": "From 'Gaslight' to 'Girlboss': Unpacking the Power Dynamics of Modern Lingo",
+    "date": "2026-11-10T20:39:12.326008",
+    "duration_sec": 1286.45,
+    "duration_min": 21.44,
+    "video_file": "podcast_ep27_20261110_202128.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
