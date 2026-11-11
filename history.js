@@ -242,6 +242,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.44,
     "video_file": "podcast_ep27_20261110_202128.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 28,
+    "topic": "From 'Main Character' to 'Villain Era': Mastering Your Narrative with Modern Self-Labeling",
+    "date": "2026-11-11T20:24:31.617622",
+    "duration_sec": 1353.34,
+    "duration_min": 22.56,
+    "video_file": "podcast_ep28_20261111_200439.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
