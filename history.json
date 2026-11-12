@@ -250,5 +250,14 @@
     "duration_min": 22.56,
     "video_file": "podcast_ep28_20261111_200439.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 29,
+    "topic": "From 'On Read' to 'Soft Launch': Decoding the Latest Relationship & Social Media Codes",
+    "date": "2026-11-12T20:55:10.191500",
+    "duration_sec": 1357.1,
+    "duration_min": 22.62,
+    "video_file": "podcast_ep29_20261112_204158.mp4",
+    "platform": "Facebook"
   }
 ]
