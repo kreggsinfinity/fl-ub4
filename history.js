@@ -269,6 +269,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.54,
     "video_file": "podcast_ep30_20261113_202421.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 31,
+    "topic": "From 'rizz' to 'delulu': Mastering the Art of Online Persona & Delusional Confidence",
+    "date": "2026-11-14T18:57:35.551234",
+    "duration_sec": 1373.57,
+    "duration_min": 22.89,
+    "video_file": "podcast_ep31_20261114_184104.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
