@@ -287,6 +287,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.7,
     "video_file": "podcast_ep32_20261115_191826.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 33,
+    "topic": "From 'Sus' to 'Big Yikes': Navigating the Nuances of Suspicion and Cringe in Urban English",
+    "date": "2026-11-16T23:04:13.222437",
+    "duration_sec": 1354.17,
+    "duration_min": 22.57,
+    "video_file": "podcast_ep33_20261116_224817.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
