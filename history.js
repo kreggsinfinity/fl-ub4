@@ -296,6 +296,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.57,
     "video_file": "podcast_ep33_20261116_224817.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 34,
+    "topic": "From 'FOMO' to 'JOMO': Mastering the Art of Digital Presence & Real-Life Balance",
+    "date": "2026-11-17T21:52:28.052154",
+    "duration_sec": 1333.2,
+    "duration_min": 22.22,
+    "video_file": "podcast_ep34_20261117_213646.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
