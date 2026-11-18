@@ -305,6 +305,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.22,
     "video_file": "podcast_ep34_20261117_213646.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 35,
+    "topic": "From 'Ghosting' to 'Breadcrumbing': Navigating Modern Dating's Digital Minefield",
+    "date": "2026-11-18T21:31:49.885139",
+    "duration_sec": 1303.94,
+    "duration_min": 21.73,
+    "video_file": "podcast_ep35_20261118_211218.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
