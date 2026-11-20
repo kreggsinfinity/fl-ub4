@@ -323,6 +323,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.14,
     "video_file": "podcast_ep36_20261119_211600.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 37,
+    "topic": "From 'IYKYK' to 'It's Giving Vibes': Decoding the Unspoken Language of Cool",
+    "date": "2026-11-20T21:14:41.311568",
+    "duration_sec": 1303.65,
+    "duration_min": 21.73,
+    "video_file": "podcast_ep37_20261120_205843.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
