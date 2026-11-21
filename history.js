@@ -332,6 +332,15 @@ const PODCAST_HISTORY = [
     "duration_min": 21.73,
     "video_file": "podcast_ep37_20261120_205843.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 38,
+    "topic": "From 'Simp' to 'Pick Me': Decoding Modern Relationship Dynamics & Labeling Lingo",
+    "date": "2026-11-21T20:12:37.025965",
+    "duration_sec": 1344.1,
+    "duration_min": 22.4,
+    "video_file": "podcast_ep38_20261121_195924.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
