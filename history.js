@@ -350,6 +350,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.87,
     "video_file": "podcast_ep39_20261122_201338.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 40,
+    "topic": "From 'Cap' to 'No Cap': Mastering Authenticity in the Age of Authenticity",
+    "date": "2026-11-24T00:55:09.280714",
+    "duration_sec": 1314.12,
+    "duration_min": 21.9,
+    "video_file": "podcast_ep40_20261124_003941.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
