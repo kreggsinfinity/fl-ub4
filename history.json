@@ -358,5 +358,14 @@
     "duration_min": 21.9,
     "video_file": "podcast_ep40_20261124_003941.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 41,
+    "topic": "From 'Vibe Check' to 'Spill the Tea': Navigating the Nuances of Social Dynamics & Gossip",
+    "date": "2026-11-24T23:13:44.547845",
+    "duration_sec": 1321.49,
+    "duration_min": 22.02,
+    "video_file": "podcast_ep41_20261124_225750.mp4",
+    "platform": "Facebook"
   }
 ]
