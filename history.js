@@ -368,6 +368,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.02,
     "video_file": "podcast_ep41_20261124_225750.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 42,
+    "topic": "Slang Natives Use That Textbooks Ignore",
+    "date": "2026-11-25T22:30:05.476676",
+    "duration_sec": 1352.95,
+    "duration_min": 22.55,
+    "video_file": "podcast_ep42_20261125_221450.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
