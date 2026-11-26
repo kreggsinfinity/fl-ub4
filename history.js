@@ -377,6 +377,15 @@ const PODCAST_HISTORY = [
     "duration_min": 22.55,
     "video_file": "podcast_ep42_20261125_221450.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 43,
+    "topic": "From 'No Hard Feelings' to 'Zero Chill': Navigating the Spectrum of Reactions",
+    "date": "2026-11-26T22:22:49.165035",
+    "duration_sec": 1273.44,
+    "duration_min": 21.22,
+    "video_file": "podcast_ep43_20261126_221122.mp4",
+    "platform": "Facebook"
   }
 ];
 if (typeof module !== 'undefined' && module.exports) { module.exports = PODCAST_HISTORY; }
