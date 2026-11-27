@@ -385,5 +385,14 @@
     "duration_min": 21.22,
     "video_file": "podcast_ep43_20261126_221122.mp4",
     "platform": "Facebook"
+  },
+  {
+    "episode": 44,
+    "topic": "From 'Glow Up' to 'Self-Care Era': Mastering the Language of Personal Transformation",
+    "date": "2026-11-27T22:06:43.348278",
+    "duration_sec": 1280.69,
+    "duration_min": 21.34,
+    "video_file": "podcast_ep44_20261127_215128.mp4",
+    "platform": "None"
   }
 ]
